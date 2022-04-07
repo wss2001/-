@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+    <h1>百家讲坛</h1>
+    <ul id="list">
+        <li></li>
+    </ul>
+    <div class="content">
+
+    </div>
+    <script>
+        var tpl='<li></li>'
+        var fileData=function(arr){
+            var html=''
+            arr.forEach(element => {
+                html+=`<li class="item" data-_id=${element._id}>${element.title}</li>`
+            });
+            $('#list').html(html)
+            $('.item').on('click',function(){
+                // console.log($(this).attr('data-_id'))
+                getContent($(this).attr('data-_id'))
+            })
+        }
+        var getList=function(){
+            $.ajax({
+                type:'get',
+                url:'list',
+                data:{},
+                success:function(e){
+                    console.log(e)
+                    fileData(e)
+                }
+            })
+        }
+        var getContent=function(_id){
+            $.ajax({
+                type:'get',
+                url:'/pages',
+                data:{
+                    _id:_id
+                },
+                success:function(e){
+                    $('.content').html(e[0].content)
+                }
+            })
+        }
+        getList()
+    </script>
+</body>
+</html>

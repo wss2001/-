@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="page-header">
+            <small><a href="/admin">登录后台</a></small>
+            <h1>王守帅 <small>百家讲坛的那些事</small></h1>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <% result.forEach(function(e){ %>
+                <a href="/p?_id=<%= e._id%>">
+                    <h3>
+                        <%= e.title%>
+                    </h3>
+                </a>
+                <p>
+                    日期:<%= e.date%>
+                </p>
+                <p>
+                    <%= e.intro%>
+                </p>
+                <%})%>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

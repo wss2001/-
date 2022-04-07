@@ -1,0 +1,23 @@
+文章的字段
+1,_id   主键，标识
+2,分类  sort
+3，标题  title
+4，日期   date
+5，作者   author
+6,简介  intro
+7，内容   content
+8，评论   <comment>
+
+评论comment的字段
+_id
+fid  根据这个来找对应的文章  值为文章 _id
+内容  content
+作者  author   //采用邮箱来展示
+日期  date
+状态   state [0:'正在等待审核',1:'审核通过',2:'审核不通过']
+
+{"_id":{"$oid":"61d42d7796fd3ffb4904d645"},
+"fid":"61d3e41db2a57e3a95a134fc",
+"content":"要不是你长得帅我才不评论",
+"date":"2022-01-04  19:20",
+"author":"wss2001@outlook.com"}

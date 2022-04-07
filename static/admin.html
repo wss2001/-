@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+    </script>
+    <style>
+        .warp-warp {
+            position: relative;
+        }
+
+        .right-warp {
+            position: absolute;
+            width: 100%;
+            min-height: 500px;
+            display: none;
+        }
+
+        .right-warp.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>个人博客系统后台管理 <small>v0.00.01</small></h1>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation" class="list-item active" data-warp="home"><a href="#">Home</a></li>
+                    <li role="presentation" class="list-item" data-warp="fabiao"><a href="#">发布文章</a></li>
+                    <li role="presentation" class="list-item " data-warp="shenhe" id="shenhe-btn"><a href="#">审核评论</a>
+                    </li>
+                    <li role="presentation" class="list-item " data-warp="change" id="change-btn"><a href="#">修改文章</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 warp-warp">
+                <!-- 主页部分 -->
+                <div class="right-warp" id="home">主页</div>
+                <!-- 发布文章部分 -->
+                <div class="right-warp" id="fabiao">
+                    <form action="/admin/uploadPage" method="post">
+                        <div class="form-group">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" name="title" id="title" placeholder="请输入标题">
+                        </div>
+                        <div class="form-group">
+                            <label for="author">作者</label>
+                            <input type="text" class="form-control" name="author" id="author" placeholder="请输入作者姓名">
+                        </div>
+                        <div class="form-group">
+                            <label for="sort">分类</label>
+                            <input type="text" class="form-control" name="sort" id="sort" placeholder="请输入分类">
+                        </div>
+                        <div class="form-group">
+                            <label for="intro">简介</label>
+                            <input type="text" class="form-control" name="intro" id="intro" placeholder="请输入简介">
+                        </div>
+                        <div class="form-group">
+                            内容：
+                            <textarea class="form-control" rows="3" name="content" placeholder="请输入内容"></textarea>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-default">发布</button>
+                    </form>
+                </div>
+                <!-- 审核评论部分 -->
+                <div class="right-warp" id="shenhe">
+                </div>
+                <!-- 修改文章部分 -->
+                <div class="right-warp" id="change">
+                    <div class="page-header">
+                        <h1>文章修改 <small>谨慎改变</small></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/admin.js"></script>
+    <script>
+        var passComment = function (_id) {
+            $.ajax({
+                type: 'get',
+                url: '/admin/passComment',
+                data: {
+                    _id: _id
+                },
+                success: function (e) {
+                    console.log(e)
+                    getComment()
+                }
+            })
+        }
+        var noPassComment = function (_id) {
+            $.ajax({
+                type: 'get',
+                // url: 'http://localhost:3000/admin/noPassComment',
+                url: '/admin/noPassComment',
+                data: {
+                    _id: _id
+                },
+                success: function (e) {
+                    console.log(e)
+                    getComment()
+                }
+            })
+        }
+        var addEventListener = function () {
+            $('.btn-pass').on('click', function () {
+                passComment(
+                    $(this).attr('data-_id')
+                )
+            })
+            $('.btn-nopass').on('click', function () {
+                noPassComment(
+                    $(this).attr('data-_id')
+                )
+            })
+        }
+        $('#shenhe-btn').on('click', function () {
+            getComment()
+        })
+        var fileComment = function (arr) {
+            var html = ''
+            if (arr.length == 0) {
+                $('#shenhe').html('<div class="well">没有人评论</div>')
+                return
+            }
+            arr.forEach(e => {
+                html += ` <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">作者：${e.author} 日期：${e.date}</h3>
+                        </div>
+                        <div class="panel-body">
+                            内容：${e.content}
+                        </div>
+                        <div class="well">
+                            评论的文章标题：${e.f_title}
+                            <br>
+                            评论的文章简介：${e.f_intro}
+                        </div>
+                        <div class="panel-footer">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button type="button" class="btn btn-default btn-success btn-pass" data-_id="${e._id}">通过</button>
+                                <button type="button" class="btn btn-default btn-danger btn-nopass" data-_id="${e._id}">不通过</button>
+                            </div>
+                        </div>
+                    </div>`
+            });
+            $('#shenhe').html(html)
+            // 得有这个，不然点击通过不通过不好使
+            addEventListener()
+        }
+        var getComment = function () {
+            $.ajax({
+                type: 'get',
+                // url: 'http://localhost:3000/admin/getComment',
+                url: '/admin/getComment',
+                data: {},
+                success: function (e) {
+                    console.log(e)
+                    fileComment(e)
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

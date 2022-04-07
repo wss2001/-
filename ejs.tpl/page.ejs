@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+    </script>
+    <style>
+        .panel-footer p {
+            text-align: right;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/"><h1>首页</h1></a>
+        <div class="page-header">
+            <h1> <%= data.title%>
+                <small><%= data.intro%></small>
+            </h1>
+        </div>
+        <p>
+            分类：<button class="btn btn-primary" type="button">
+                <%= data.sort%> <span class="badge"></span>
+            </button>
+        </p>
+        <p>
+            作者：<%= data.author%>
+        </p>
+        <p>
+            日期：<%= data.date%>
+        </p>
+        <div class="well">
+            <%=data.content%>
+        </div>
+
+        <div>
+                <h3>评论</h3>
+                <% result.forEach(function(e){ %>
+                    <span class="badge"></span>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <%= e.content %>
+                        </div>
+                        <div class="panel-footer">
+                            <p><%= e.author %></p>
+                            <p><%= e.date %></p>
+                        </div>
+                    </div>
+                
+                <% })%>
+            
+        </div>
+        <div>
+            <ul class="page-header">
+                <h3>我也想发表评论评论</h3>
+                <form action="/submitComment?_id=<%= data._id%>" method="post">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">你的邮箱</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" name="email"
+                            placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" name="content" placeholder="评论内容"></textarea>
+                    </div>
+        </div>
+        <button type="submit" class="btn btn-default">提交</button>
+        </form>
+    </div>
+    </div>
+</body>
+
+</html>
